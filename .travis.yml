@@ -1,0 +1,17 @@
+language: ruby
+before_script:
+  - ./spec/setup/arangodb.sh
+rvm:
+  - 1.9.3
+  - 2.0.0
+  - jruby-19mode
+  - jruby-head
+  - rbx-19mode
+  - ruby-head
+env:
+  - ARANGODB_DISABLE_AUTHENTIFICATION=true VERSION=1.4.devel
+matrix:
+  allow_failures:
+    - rvm: ruby-head
+    - rvm: jruby-head
+script: "bundle exec rake ci"
