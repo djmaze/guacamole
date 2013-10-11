@@ -15,3 +15,21 @@ namespace :spec do
     spec.pattern = 'spec/acceptance/*_spec.rb'
   end
 end
+
+## CI Task
+# Differences to Devtools:
+# * Only run specific tasks
+
+Rake::Task['ci'].clear
+
+desc 'Run all metrics and specs'
+task ci: %w[
+  spec
+  metrics:coverage
+  metrics:reek
+  metrics:rubocop
+  metrics:yardstick:verify
+]
+
+## Default Task
+task default: :ci
