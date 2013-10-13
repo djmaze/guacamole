@@ -11,7 +11,6 @@ describe 'Basics' do
 
   describe Article do
     it 'should allow setting its title' do
-      pending 'To be implemented'
       subject.title = 'This is my fancy article'
 
       expect(subject.title).to eq('This is my fancy article')
