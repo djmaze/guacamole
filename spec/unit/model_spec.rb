@@ -21,6 +21,10 @@ describe Guacamole::Model do
     it 'should include ActiveModel::Validation' do
       expect(subject.ancestors).to include ActiveModel::Validations
     end
+
+    it 'should include ActiveModel::Naming' do
+      expect(subject.ancestors).to include ActiveModel::Naming
+    end
   end
 
   describe 'default attributes' do

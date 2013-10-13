@@ -33,5 +33,10 @@ describe 'Basics' do
       subject.title = 'The Legend of Zelda'
       expect(subject.valid?).to be_true
     end
+
+    it 'should know its model name' do
+      # This test passes when you only require ActiveModel::Validations
+      expect(subject.class.model_name).to eq 'Article'
+    end
   end
 end
