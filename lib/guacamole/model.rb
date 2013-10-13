@@ -8,6 +8,9 @@ module Guacamole
 
     included do
       include Virtus.model
+
+      attribute :key, String
+      attribute :rev, String
     end
   end
 end

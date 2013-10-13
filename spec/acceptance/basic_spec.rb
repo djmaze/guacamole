@@ -17,7 +17,6 @@ describe 'Basics' do
     end
 
     it 'should have key and rev attributes' do
-      pending 'To be implemented'
       expect(subject.key).to be_nil
       expect(subject.rev).to be_nil
     end

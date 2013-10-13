@@ -17,4 +17,18 @@ describe Guacamole::Model do
       end).to be_true
     end
   end
+
+  describe 'default attributes' do
+    subject { TestModel.new }
+
+    it 'should add the key attribute' do
+      subject.key = '12345'
+      expect(subject.key).to eq '12345'
+    end
+
+    it 'should add the rev attribute' do
+      subject.rev = '98765'
+      expect(subject.rev).to eq '98765'
+    end
+  end
 end
