@@ -1,5 +1,6 @@
 # -*- encoding : utf-8 -*-
 require 'active_support/concern'
+require 'active_model'
 require 'virtus'
 
 module Guacamole
@@ -8,6 +9,7 @@ module Guacamole
 
     included do
       include Virtus.model
+      include ActiveModel::Validations
 
       attribute :key, String
       attribute :rev, String

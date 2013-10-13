@@ -7,6 +7,8 @@ describe 'Basics' do
     include Guacamole::Model
 
     attribute :title, String
+
+    validates :title, presence: true
   end
 
   describe Article do
@@ -24,6 +26,12 @@ describe 'Basics' do
     it 'should have timestamp attributes which are empty' do
       expect(subject.created_at).to be_nil
       expect(subject.updated_at).to be_nil
+    end
+
+    it 'should validate its attributes' do
+      expect(subject.valid?).to be_false
+      subject.title = 'The Legend of Zelda'
+      expect(subject.valid?).to be_true
     end
   end
 end

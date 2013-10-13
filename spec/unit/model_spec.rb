@@ -17,6 +17,10 @@ describe Guacamole::Model do
         ancestor.to_s.include? 'Virtus'
       end).to be_true
     end
+
+    it 'should include ActiveModel::Validation' do
+      expect(subject.ancestors).to include ActiveModel::Validations
+    end
   end
 
   describe 'default attributes' do
