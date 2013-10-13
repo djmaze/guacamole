@@ -38,5 +38,10 @@ describe 'Basics' do
       # This test passes when you only require ActiveModel::Validations
       expect(subject.class.model_name).to eq 'Article'
     end
+
+    it 'should convert itself to params' do
+      subject.key = 'random_number'
+      expect(subject.to_param).to eq 'random_number'
+    end
   end
 end

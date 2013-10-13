@@ -25,6 +25,10 @@ describe Guacamole::Model do
     it 'should include ActiveModel::Naming' do
       expect(subject.ancestors).to include ActiveModel::Naming
     end
+
+    it 'should include ActiveModel::Conversion' do
+      expect(subject.ancestors).to include ActiveModel::Conversion
+    end
   end
 
   describe 'default attributes' do
@@ -48,6 +52,29 @@ describe Guacamole::Model do
     it 'should add the updated_at attribute' do
       subject.updated_at = current_time
       expect(subject.updated_at).to be current_time
+    end
+  end
+
+  describe 'persisted?' do
+    subject { TestModel.new }
+
+    it 'should be persisted if it has a key' do
+      subject.key = 'my_key'
+      expect(subject.persisted?).to be_true
+    end
+
+    it "should not be persisted if it doesn't have a key" do
+      subject.key = nil
+      expect(subject.persisted?).to be_false
+    end
+  end
+
+  describe 'id' do
+    subject { TestModel.new }
+
+    it 'should alias key to id for ActiveModel::Conversion compliance' do
+      subject.key = 'my_key'
+      expect(subject.id).to eq 'my_key'
     end
   end
 end
