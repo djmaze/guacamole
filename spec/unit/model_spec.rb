@@ -9,6 +9,7 @@ end
 
 describe Guacamole::Model do
   subject { TestModel }
+  let(:current_time) { DateTime.now }
 
   describe 'module inclusion' do
     it 'should include Virtus.model' do
@@ -29,6 +30,16 @@ describe Guacamole::Model do
     it 'should add the rev attribute' do
       subject.rev = '98765'
       expect(subject.rev).to eq '98765'
+    end
+
+    it 'should add the created_at attribute' do
+      subject.created_at = current_time
+      expect(subject.created_at).to be current_time
+    end
+
+    it 'should add the updated_at attribute' do
+      subject.updated_at = current_time
+      expect(subject.updated_at).to be current_time
     end
   end
 end

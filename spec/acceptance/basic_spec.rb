@@ -22,7 +22,6 @@ describe 'Basics' do
     end
 
     it 'should have timestamp attributes which are empty' do
-      pending 'To be implemented'
       expect(subject.created_at).to be_nil
       expect(subject.updated_at).to be_nil
     end

@@ -11,6 +11,8 @@ module Guacamole
 
       attribute :key, String
       attribute :rev, String
+      attribute :created_at, DateTime
+      attribute :updated_at, DateTime
     end
   end
 end
