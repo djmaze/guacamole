@@ -49,7 +49,8 @@ describe Guacamole::Collection do
     end
 
     let(:key)       { double('Key') }
-    let(:document)  { double('Document', key: key).as_null_object }
+    let(:rev)       { double('Rev') }
+    let(:document)  { double('Document', key: key, revision: rev).as_null_object }
     let(:model)     { double('Model').as_null_object }
 
     it 'should create a document' do
@@ -74,11 +75,19 @@ describe Guacamole::Collection do
     end
 
     context 'with successful document creation' do
-
-      it 'should add key to model' do
+      before do
         allow(connection).to receive(:create_document).with(document).and_return(document)
         allow(mapper).to receive(:model_to_document).with(model).and_return(document)
+      end
+
+      it 'should add key to model' do
         expect(model).to receive(:key=).with(key)
+
+        subject.save model
+      end
+
+      it 'should add rev to model' do
+        expect(model).to receive(:rev=).with(rev)
 
         subject.save model
       end
