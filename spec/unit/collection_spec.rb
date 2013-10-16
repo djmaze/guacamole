@@ -46,6 +46,9 @@ describe Guacamole::Collection do
     before do
       subject.connection = connection
       subject.mapper     = mapper
+
+      allow(connection).to receive(:create_document).with(document).and_return(document)
+      allow(mapper).to receive(:model_to_document).with(model).and_return(document)
     end
 
     let(:key)       { double('Key') }
@@ -61,9 +64,6 @@ describe Guacamole::Collection do
     end
 
     it 'should return the model after calling save' do
-      allow(connection).to receive(:create_document).with(document).and_return(document)
-      allow(mapper).to receive(:model_to_document).with(model).and_return(document)
-
       expect(subject.save(model)).to eq model
     end
 
@@ -76,28 +76,20 @@ describe Guacamole::Collection do
       expect(model).to receive(:updated_at=).with(now).ordered
 
       allow(connection).to receive(:create_document).with(document).and_return(document).ordered
-      allow(mapper).to receive(:model_to_document).with(model).and_return(document)
 
       subject.save model
     end
 
-    context 'with successful document creation' do
-      before do
-        allow(connection).to receive(:create_document).with(document).and_return(document)
-        allow(mapper).to receive(:model_to_document).with(model).and_return(document)
-      end
+    it 'should add key to model' do
+      expect(model).to receive(:key=).with(key)
 
-      it 'should add key to model' do
-        expect(model).to receive(:key=).with(key)
+      subject.save model
+    end
 
-        subject.save model
-      end
+    it 'should add rev to model' do
+      expect(model).to receive(:rev=).with(rev)
 
-      it 'should add rev to model' do
-        expect(model).to receive(:rev=).with(rev)
-
-        subject.save model
-      end
+      subject.save model
     end
 
   end
