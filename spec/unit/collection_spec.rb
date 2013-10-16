@@ -100,13 +100,13 @@ describe Guacamole::Collection do
         expect(model).to receive(:valid?).and_return(false)
       end
 
-      it 'should not create the document' do
+      it 'should not be used to create the document' do
         expect(connection).to receive(:create_document).never
 
         subject.save model
       end
 
-      it 'should not change the model' do
+      it 'should not be changed' do
         expect(model).to receive(:created_at=).never
         expect(model).to receive(:updated_at=).never
         expect(model).to receive(:key=).never
