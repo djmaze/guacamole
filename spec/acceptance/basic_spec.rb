@@ -9,6 +9,10 @@ class Article
   validates :title, presence: true
 end
 
+class ArticlesCollection
+  include Guacamole::Collection
+end
+
 describe 'ModelBasics' do
 
   describe Article do
@@ -44,4 +48,23 @@ describe 'ModelBasics' do
       expect(subject.to_param).to eq 'random_number'
     end
   end
+end
+
+describe 'CollectionBasics' do
+
+  describe ArticlesCollection do
+
+    it 'should provide a method to find documents by key and return the appropriate model' do
+      pending 'Not yet implemented'
+
+      # TODO: To make this test work we need to implement the following things
+      #   * Create test data
+      #   * Setup the test database and ensure it is in a defined state
+      #   * Implement the #== method on Guacamole::Model
+      found_model = subject.by_key some_article.key
+      expect(found_model).to eq some_article
+    end
+
+  end
+
 end
