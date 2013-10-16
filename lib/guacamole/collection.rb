@@ -6,6 +6,8 @@ module Guacamole
     extend ActiveSupport::Concern
 
     module ClassMethods
+      extend Forwardable
+      def_delegators :mapper, :model_to_document
 
       attr_accessor :connection, :mapper
 
@@ -16,14 +18,24 @@ module Guacamole
       def save(model)
         return model unless model.valid?
 
+        add_timestamps_to_model model
+        create_document_from model
+        model
+      end
+
+      def add_timestamps_to_model(model)
         timestamp = DateTime.now
         model.created_at = timestamp
         model.updated_at = timestamp
-        document = connection.create_document(mapper.model_to_document(model))
+      end
+
+      def create_document_from(model)
+        document = connection.create_document(model_to_document(model))
+
         model.key = document.key
         model.rev = document.revision
 
-        return model
+        document
       end
 
     end
