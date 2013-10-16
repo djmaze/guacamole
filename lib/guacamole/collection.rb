@@ -23,6 +23,12 @@ module Guacamole
         model
       end
 
+      def delete(key)
+        document = connection.fetch(key)
+        document.delete
+        key
+      end
+
       def add_timestamps_to_model(model)
         timestamp = DateTime.now
         model.created_at = timestamp

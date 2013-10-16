@@ -29,10 +29,13 @@ describe Guacamole::Collection do
   let(:connection) { double('Connection') }
   let(:mapper)     { double('Mapper') }
 
+  before do
+    subject.connection = connection
+    subject.mapper     = mapper
+  end
+
   describe 'by_key' do
     it 'should get mapped documents by key from the database' do
-      subject.connection = connection
-      subject.mapper     = mapper
       document           = { data: 'foo' }
       model              = double('Model')
 
@@ -46,9 +49,6 @@ describe Guacamole::Collection do
   describe 'save' do
 
     before do
-      subject.connection = connection
-      subject.mapper     = mapper
-
       allow(connection).to receive(:create_document).with(document).and_return(document)
       allow(mapper).to receive(:model_to_document).with(model).and_return(document)
     end
@@ -117,6 +117,25 @@ describe Guacamole::Collection do
         subject.save model
       end
     end
+  end
 
+  describe 'delete' do
+    let(:document) { double('Document') }
+    let(:key)      { double('Key') }
+
+    before do
+      allow(connection).to receive(:fetch).with(key).and_return(document)
+      allow(document).to receive(:delete)
+    end
+
+    it 'should delete the according document' do
+      expect(document).to receive(:delete)
+
+      subject.delete key
+    end
+
+    it 'should return the according key' do
+      expect(subject.delete(key)).to eq key
+    end
   end
 end
