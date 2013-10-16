@@ -17,6 +17,22 @@ describe Guacamole::Collection do
 
   subject { TestCollection }
 
+  describe 'Configuration' do
+    it 'should set the connection to ArangoDB' do
+      mock_db_connection = double('ConnectionToCollection')
+      subject.connection = mock_db_connection
+
+      expect(subject.connection).to eq mock_db_connection
+    end
+
+    it 'should set the Mapper instance to map documents to models and vice versa' do
+      mock_mapper    = double('Mapper')
+      subject.mapper = mock_mapper
+
+      expect(subject.mapper).to eq mock_mapper
+    end
+  end
+
   let(:connection) { double('Connection') }
   let(:mapper)     { FakeMapper.new }
 
