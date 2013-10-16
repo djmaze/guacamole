@@ -190,6 +190,12 @@ describe Guacamole::Collection do
       it 'should return the model' do
         expect(subject.replace(model)).to eq model
       end
+
+      it 'should not update created_at' do
+        expect(model).to receive(:created_at=).never
+
+        subject.replace model
+      end
     end
 
     context 'an invalid model' do
