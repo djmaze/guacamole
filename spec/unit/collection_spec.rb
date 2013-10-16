@@ -60,6 +60,13 @@ describe Guacamole::Collection do
       subject.save model
     end
 
+    it 'should return the model after calling save' do
+      allow(connection).to receive(:create_document).with(document).and_return(document)
+      allow(mapper).to receive(:model_to_document).with(model).and_return(document)
+
+      expect(subject.save(model)).to eq model
+    end
+
     it 'should set timestamps before creating the document' do
       now = double('DateTime.now')
 

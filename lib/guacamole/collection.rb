@@ -20,6 +20,8 @@ module Guacamole
         document = connection.create_document(mapper.model_to_document(model))
         model.key = document.key
         model.rev = document.revision
+
+        return model
       end
 
     end
