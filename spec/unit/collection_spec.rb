@@ -29,16 +29,18 @@ describe Guacamole::Collection do
   let(:connection) { double('Connection') }
   let(:mapper)     { double('Mapper') }
 
-  it 'should provide a method to get mapped documents by key from the database' do
-    subject.connection = connection
-    subject.mapper     = mapper
-    document           = { data: 'foo' }
-    model              = double('Model')
+  describe 'by_key' do
+    it 'should get mapped documents by key from the database' do
+      subject.connection = connection
+      subject.mapper     = mapper
+      document           = { data: 'foo' }
+      model              = double('Model')
 
-    expect(connection).to receive(:fetch).with('some_key').and_return(document)
-    expect(mapper).to receive(:document_to_model).with(document).and_return(model)
+      expect(connection).to receive(:fetch).with('some_key').and_return(document)
+      expect(mapper).to receive(:document_to_model).with(document).and_return(model)
 
-    expect(subject.by_key('some_key')).to eq model
+      expect(subject.by_key('some_key')).to eq model
+    end
   end
 
   describe 'save' do
