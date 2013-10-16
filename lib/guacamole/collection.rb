@@ -29,6 +29,10 @@ module Guacamole
         key
       end
 
+      def replace(model)
+        model.updated_at = DateTime.now
+      end
+
       def add_timestamps_to_model(model)
         timestamp = DateTime.now
         model.created_at = timestamp

@@ -138,4 +138,17 @@ describe Guacamole::Collection do
       expect(subject.delete(key)).to eq key
     end
   end
+
+  describe 'replace' do
+    let(:model) { double('Model') }
+
+    it 'should set the updated_at timestamp before replacing the document' do
+      now = double('DateTime.now')
+
+      allow(DateTime).to receive(:now).once.and_return(now)
+      expect(model).to receive(:updated_at=).with(now)
+
+      subject.replace model
+    end
+  end
 end
