@@ -8,7 +8,6 @@ class TestCollection
 end
 
 describe Guacamole::Collection do
-
   subject { TestCollection }
 
   describe 'Configuration' do
@@ -42,16 +41,36 @@ describe Guacamole::Collection do
     expect(subject.by_key('some_key')).to eq model
   end
 
-  it 'should store documents in the database' do
-    subject.connection = connection
-    subject.mapper     = mapper
-    document           = double('Document').as_null_object
-    model              = double('Model').as_null_object
+  describe 'save' do
 
-    expect(connection).to receive(:create_document).with(document)
-    expect(mapper).to receive(:model_to_document).with(model).and_return(document)
+    before do
+      subject.connection = connection
+      subject.mapper     = mapper
+    end
 
-    subject.save model
+    let(:document)  { double('Document').as_null_object }
+    let(:model)     { double('Model').as_null_object }
+
+    it 'should create a document' do
+      expect(connection).to receive(:create_document).with(document)
+      expect(mapper).to receive(:model_to_document).with(model).and_return(document)
+
+      subject.save model
+    end
+
+    it 'should set timestamps before creating the document' do
+      now = double("DateTime.now")
+
+      allow(DateTime).to receive(:now).once.and_return(now)
+
+      expect(model).to receive(:created_at=).with(now).ordered
+      expect(model).to receive(:updated_at=).with(now).ordered
+
+      allow(connection).to receive(:create_document).with(document).ordered
+      allow(mapper).to receive(:model_to_document).with(model).and_return(document)
+
+      subject.save model
+    end
+
   end
-
 end
