@@ -1,15 +1,15 @@
 # -*- encoding : utf-8 -*-
 require 'guacamole'
 
-describe 'Basics' do
+class Article
+  include Guacamole::Model
 
-  class Article
-    include Guacamole::Model
+  attribute :title, String
 
-    attribute :title, String
+  validates :title, presence: true
+end
 
-    validates :title, presence: true
-  end
+describe 'ModelBasics' do
 
   describe Article do
     it 'should allow setting its title' do
