@@ -141,6 +141,7 @@ describe Guacamole::Collection do
 
   describe 'replace' do
     let(:key)      { double('Key') }
+    let(:rev)      { double('Rev') }
     let(:model)    { double('Model', key: key) }
     let(:document) { double('Document') }
 
@@ -148,6 +149,8 @@ describe Guacamole::Collection do
       allow(mapper).to receive(:model_to_document).with(model).and_return(document)
       allow(model).to receive(:updated_at=)
       allow(connection).to receive(:replace)
+      allow(model).to receive(:rev=)
+      allow(document).to receive(:[]).with('_rev').and_return(rev)
     end
 
     it 'should set the updated_at timestamp before replacing the document' do
@@ -161,6 +164,13 @@ describe Guacamole::Collection do
 
     it 'should replace the document by key via the connection' do
       expect(connection).to receive(:replace).with(key, document)
+
+      subject.replace model
+    end
+
+    it 'should update the revision after replacing the document' do
+      allow(connection).to receive(:replace).ordered
+      expect(model).to receive(:rev=).with(rev).ordered
 
       subject.replace model
     end
