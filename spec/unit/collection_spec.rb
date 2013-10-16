@@ -56,40 +56,64 @@ describe Guacamole::Collection do
     let(:document)  { double('Document', key: key, revision: rev).as_null_object }
     let(:model)     { double('Model').as_null_object }
 
-    it 'should create a document' do
-      expect(connection).to receive(:create_document).with(document).and_return(document)
-      expect(mapper).to receive(:model_to_document).with(model).and_return(document)
+    context 'a valid model' do
+      it 'should create a document' do
+        expect(connection).to receive(:create_document).with(document).and_return(document)
+        expect(mapper).to receive(:model_to_document).with(model).and_return(document)
 
-      subject.save model
+        subject.save model
+      end
+
+      it 'should return the model after calling save' do
+        expect(subject.save(model)).to eq model
+      end
+
+      it 'should set timestamps before creating the document' do
+        now = double('DateTime.now')
+
+        allow(DateTime).to receive(:now).once.and_return(now)
+
+        expect(model).to receive(:created_at=).with(now).ordered
+        expect(model).to receive(:updated_at=).with(now).ordered
+
+        allow(connection).to receive(:create_document).with(document).and_return(document).ordered
+
+        subject.save model
+      end
+
+      it 'should add key to model' do
+        expect(model).to receive(:key=).with(key)
+
+        subject.save model
+      end
+
+      it 'should add rev to model' do
+        expect(model).to receive(:rev=).with(rev)
+
+        subject.save model
+      end
     end
 
-    it 'should return the model after calling save' do
-      expect(subject.save(model)).to eq model
-    end
+    context 'an invalid model' do
 
-    it 'should set timestamps before creating the document' do
-      now = double('DateTime.now')
+      before do
+        expect(model).to receive(:valid?).and_return(false)
+      end
 
-      allow(DateTime).to receive(:now).once.and_return(now)
+      it 'should not create the document' do
+        expect(connection).to receive(:create_document).never
 
-      expect(model).to receive(:created_at=).with(now).ordered
-      expect(model).to receive(:updated_at=).with(now).ordered
+        subject.save model
+      end
 
-      allow(connection).to receive(:create_document).with(document).and_return(document).ordered
+      it 'should not change the model' do
+        expect(model).to receive(:created_at=).never
+        expect(model).to receive(:updated_at=).never
+        expect(model).to receive(:key=).never
+        expect(model).to receive(:rev=).never
 
-      subject.save model
-    end
-
-    it 'should add key to model' do
-      expect(model).to receive(:key=).with(key)
-
-      subject.save model
-    end
-
-    it 'should add rev to model' do
-      expect(model).to receive(:rev=).with(rev)
-
-      subject.save model
+        subject.save model
+      end
     end
 
   end

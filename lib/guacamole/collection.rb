@@ -14,6 +14,8 @@ module Guacamole
       end
 
       def save(model)
+        return model unless model.valid?
+
         timestamp = DateTime.now
         model.created_at = timestamp
         model.updated_at = timestamp
