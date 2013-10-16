@@ -8,6 +8,7 @@ module Guacamole
     module ClassMethods
       extend Forwardable
       def_delegators :mapper, :model_to_document
+      def_delegator :connection, :fetch, :fetch_document
 
       attr_accessor :connection, :mapper
 
@@ -24,8 +25,7 @@ module Guacamole
       end
 
       def delete(key)
-        document = connection.fetch(key)
-        document.delete
+        fetch_document(key).delete
         key
       end
 
