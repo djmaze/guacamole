@@ -9,12 +9,6 @@ end
 
 describe Guacamole::Collection do
 
-  class FakeMapper
-    def document_to_model(document)
-      document
-    end
-  end
-
   subject { TestCollection }
 
   describe 'Configuration' do
@@ -34,18 +28,18 @@ describe Guacamole::Collection do
   end
 
   let(:connection) { double('Connection') }
-  let(:mapper)     { FakeMapper.new }
+  let(:mapper)     { double('Mapper') }
 
   it 'should provide a method to get mapped documents by key from the database' do
     subject.connection = connection
     subject.mapper     = mapper
     document           = { data: 'foo' }
+    model              = double('Model')
 
     expect(connection).to receive(:fetch).with('some_key').and_return(document)
-    expect(mapper).to receive(:document_to_model).with(document).and_call_original
+    expect(mapper).to receive(:document_to_model).with(document).and_return(model)
 
-    model = subject.by_key 'some_key'
-    expect(model[:data]).to eq 'foo'
+    expect(subject.by_key('some_key')).to eq model
   end
 
 end
