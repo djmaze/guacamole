@@ -42,4 +42,16 @@ describe Guacamole::Collection do
     expect(subject.by_key('some_key')).to eq model
   end
 
+  it 'should store documents in the database' do
+    subject.connection = connection
+    subject.mapper     = mapper
+    document           = double('Document').as_null_object
+    model              = double('Model').as_null_object
+
+    expect(connection).to receive(:create_document).with(document)
+    expect(mapper).to receive(:model_to_document).with(model).and_return(document)
+
+    subject.save model
+  end
+
 end

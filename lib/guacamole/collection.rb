@@ -13,6 +13,10 @@ module Guacamole
         mapper.document_to_model connection.fetch(key)
       end
 
+      def save(model)
+        connection.create_document(mapper.model_to_document(model))
+      end
+
     end
 
   end
