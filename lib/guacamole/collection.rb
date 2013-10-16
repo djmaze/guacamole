@@ -31,6 +31,8 @@ module Guacamole
 
       def replace(model)
         model.updated_at = DateTime.now
+        document = model_to_document(model)
+        connection.replace(model.key, document)
       end
 
       def add_timestamps_to_model(model)

@@ -140,13 +140,27 @@ describe Guacamole::Collection do
   end
 
   describe 'replace' do
-    let(:model) { double('Model') }
+    let(:key)      { double('Key') }
+    let(:model)    { double('Model', key: key) }
+    let(:document) { double('Document') }
+
+    before do
+      allow(mapper).to receive(:model_to_document).with(model).and_return(document)
+      allow(model).to receive(:updated_at=)
+      allow(connection).to receive(:replace)
+    end
 
     it 'should set the updated_at timestamp before replacing the document' do
       now = double('DateTime.now')
 
       allow(DateTime).to receive(:now).once.and_return(now)
       expect(model).to receive(:updated_at=).with(now)
+
+      subject.replace model
+    end
+
+    it 'should replace the document by key via the connection' do
+      expect(connection).to receive(:replace).with(key, document)
 
       subject.replace model
     end
