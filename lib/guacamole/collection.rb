@@ -34,6 +34,7 @@ module Guacamole
         document = model_to_document(model)
         connection.replace(model.key, document)
         model.rev = document['_rev']
+        model
       end
 
       def add_timestamps_to_model(model)

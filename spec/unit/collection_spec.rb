@@ -174,5 +174,9 @@ describe Guacamole::Collection do
 
       subject.replace model
     end
+
+    it 'should return the model' do
+      expect(subject.replace(model)).to eq model
+    end
   end
 end
