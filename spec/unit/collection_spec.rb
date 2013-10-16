@@ -59,6 +59,10 @@ describe Guacamole::Collection do
     let(:model)     { double('Model').as_null_object }
 
     context 'a valid model' do
+      before do
+        allow(model).to receive(:valid?).and_return(true)
+      end
+
       it 'should create a document' do
         expect(connection).to receive(:create_document).with(document).and_return(document)
         expect(mapper).to receive(:model_to_document).with(model).and_return(document)
