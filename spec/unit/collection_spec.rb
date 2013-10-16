@@ -48,28 +48,40 @@ describe Guacamole::Collection do
       subject.mapper     = mapper
     end
 
-    let(:document)  { double('Document').as_null_object }
+    let(:key)       { double('Key') }
+    let(:document)  { double('Document', key: key).as_null_object }
     let(:model)     { double('Model').as_null_object }
 
     it 'should create a document' do
-      expect(connection).to receive(:create_document).with(document)
+      expect(connection).to receive(:create_document).with(document).and_return(document)
       expect(mapper).to receive(:model_to_document).with(model).and_return(document)
 
       subject.save model
     end
 
     it 'should set timestamps before creating the document' do
-      now = double("DateTime.now")
+      now = double('DateTime.now')
 
       allow(DateTime).to receive(:now).once.and_return(now)
 
       expect(model).to receive(:created_at=).with(now).ordered
       expect(model).to receive(:updated_at=).with(now).ordered
 
-      allow(connection).to receive(:create_document).with(document).ordered
+      allow(connection).to receive(:create_document).with(document).and_return(document).ordered
       allow(mapper).to receive(:model_to_document).with(model).and_return(document)
 
       subject.save model
+    end
+
+    context 'with successful document creation' do
+
+      it 'should add key to model' do
+        allow(connection).to receive(:create_document).with(document).and_return(document)
+        allow(mapper).to receive(:model_to_document).with(model).and_return(document)
+        expect(model).to receive(:key=).with(key)
+
+        subject.save model
+      end
     end
 
   end

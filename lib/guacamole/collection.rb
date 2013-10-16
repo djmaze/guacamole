@@ -17,7 +17,8 @@ module Guacamole
         timestamp = DateTime.now
         model.created_at = timestamp
         model.updated_at = timestamp
-        connection.create_document(mapper.model_to_document(model))
+        document = connection.create_document(mapper.model_to_document(model))
+        model.key = document.key
       end
 
     end
