@@ -142,41 +142,69 @@ describe Guacamole::Collection do
   describe 'replace' do
     let(:key)      { double('Key') }
     let(:rev)      { double('Rev') }
-    let(:model)    { double('Model', key: key) }
-    let(:document) { double('Document') }
+    let(:model)    { double('Model', key: key).as_null_object }
+    let(:document) { double('Document').as_null_object }
+    let(:response) { double('Hash') }
 
     before do
       allow(mapper).to receive(:model_to_document).with(model).and_return(document)
-      allow(model).to receive(:updated_at=)
-      allow(connection).to receive(:replace)
-      allow(model).to receive(:rev=)
-      allow(document).to receive(:[]).with('_rev').and_return(rev)
+      allow(connection).to receive(:replace).and_return(response)
+      allow(response).to receive(:[]).with('_rev').and_return(rev)
     end
 
-    it 'should set the updated_at timestamp before replacing the document' do
-      now = double('DateTime.now')
+    context 'a valid model' do
+      before do
+        allow(model).to receive(:valid?).and_return(true)
+      end
 
-      allow(DateTime).to receive(:now).once.and_return(now)
-      expect(model).to receive(:updated_at=).with(now)
+      it 'should set the updated_at timestamp before replacing the document' do
+        now = double('DateTime.now')
 
-      subject.replace model
+        allow(DateTime).to receive(:now).once.and_return(now)
+        expect(model).to receive(:updated_at=).with(now)
+
+        subject.replace model
+      end
+
+      it 'should replace the document by key via the connection' do
+        expect(connection).to receive(:replace).with(key, document)
+
+        subject.replace model
+      end
+
+      it 'should update the revision after replacing the document' do
+        allow(connection).to receive(:replace).and_return(response).ordered
+        expect(model).to receive(:rev=).with(rev).ordered
+
+        subject.replace model
+      end
+
+      it 'should return the model' do
+        expect(subject.replace(model)).to eq model
+      end
     end
 
-    it 'should replace the document by key via the connection' do
-      expect(connection).to receive(:replace).with(key, document)
+    context 'an invalid model' do
+      before do
+        allow(model).to receive(:valid?).and_return(false)
+      end
 
-      subject.replace model
-    end
+      it 'should not be used to replace the document' do
+        expect(connection).to receive(:replace).never
 
-    it 'should update the revision after replacing the document' do
-      allow(connection).to receive(:replace).ordered
-      expect(model).to receive(:rev=).with(rev).ordered
+        subject.replace model
+      end
 
-      subject.replace model
-    end
+      it 'should not be changed' do
+        expect(model).to receive(:rev=).never
+        expect(model).to receive(:updated_at=).never
 
-    it 'should return the model' do
-      expect(subject.replace(model)).to eq model
+        subject.replace model
+      end
+
+      it 'should return false' do
+        expect(subject.replace(model)).to be false
+      end
     end
   end
 end

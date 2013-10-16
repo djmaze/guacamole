@@ -30,10 +30,10 @@ module Guacamole
       end
 
       def replace(model)
+        return false unless model.valid?
+
         model.updated_at = DateTime.now
-        document = model_to_document(model)
-        connection.replace(model.key, document)
-        model.rev = document['_rev']
+        replace_document_from(model)
         model
       end
 
@@ -52,6 +52,14 @@ module Guacamole
         document
       end
 
+      def replace_document_from(model)
+        document = model_to_document(model)
+        response = connection.replace(model.key, document)
+
+        model.rev = response['_rev']
+
+        document
+      end
     end
 
   end
