@@ -120,6 +120,10 @@ describe Guacamole::Collection do
 
         subject.save model
       end
+
+      it 'should return false' do
+        expect(subject.save(model)).to be false
+      end
     end
   end
 

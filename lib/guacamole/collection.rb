@@ -17,7 +17,7 @@ module Guacamole
       end
 
       def save(model)
-        return model unless model.valid?
+        return false unless model.valid?
 
         add_timestamps_to_model model
         create_document_from model
