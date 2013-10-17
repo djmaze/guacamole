@@ -11,11 +11,11 @@ describe Guacamole::Collection do
   subject { TestCollection }
 
   describe 'Configuration' do
-    it 'should set the connection to ArangoDB' do
-      mock_db_connection = double('ConnectionToCollection')
-      subject.connection = mock_db_connection
+    it 'should set the connection to the ArangoDB collection' do
+      mock_collection_connection = double('ConnectionToCollection')
+      subject.connection         = mock_collection_connection
 
-      expect(subject.connection).to eq mock_db_connection
+      expect(subject.connection).to eq mock_collection_connection
     end
 
     it 'should set the Mapper instance to map documents to models and vice versa' do
