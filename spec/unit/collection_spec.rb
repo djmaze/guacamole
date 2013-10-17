@@ -3,6 +3,9 @@
 require 'spec_helper'
 require 'guacamole/collection'
 
+class Test
+end
+
 class TestCollection
   include Guacamole::Collection
 end
@@ -23,6 +26,21 @@ describe Guacamole::Collection do
       subject.mapper = mock_mapper
 
       expect(subject.mapper).to eq mock_mapper
+    end
+
+    it 'should set the connection to ArangoDB' do
+      mock_db          = double('Ashikawa::Core::Database')
+      subject.database = mock_db
+
+      expect(subject.database).to eq mock_db
+    end
+
+    it 'should know the name of the collection in ArangoDB' do
+      expect(subject.collection_name).to eq "test"
+    end
+
+    it 'should know the class of the model to manage' do
+      expect(subject.model_class).to eq Test
     end
   end
 

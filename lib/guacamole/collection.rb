@@ -1,5 +1,6 @@
 # -*- encoding : utf-8 -*-
 require 'active_support/concern'
+require 'active_support/core_ext/string/inflections'
 
 module Guacamole
   module Collection
@@ -11,6 +12,14 @@ module Guacamole
       def_delegator :connection, :fetch, :fetch_document
 
       attr_accessor :connection, :mapper
+
+      def collection_name
+        self.name.gsub(/Collection\z/,'').underscore
+      end
+
+      def model_class
+        self.name.gsub(/Collection\z/,'').singularize.constantize
+      end
 
       def by_key(key)
         mapper.document_to_model connection.fetch(key)
