@@ -32,13 +32,13 @@ module Guacamole
       def replace(model)
         return false unless model.valid?
 
-        model.updated_at = DateTime.now
+        model.updated_at = Time.now
         replace_document_from(model)
         model
       end
 
       def add_timestamps_to_model(model)
-        timestamp = DateTime.now
+        timestamp = Time.now
         model.created_at = timestamp
         model.updated_at = timestamp
       end

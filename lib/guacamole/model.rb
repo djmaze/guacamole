@@ -16,8 +16,8 @@ module Guacamole
 
       attribute :key, String
       attribute :rev, String
-      attribute :created_at, DateTime
-      attribute :updated_at, DateTime
+      attribute :created_at, Time
+      attribute :updated_at, Time
 
       def persisted?
         key.present?

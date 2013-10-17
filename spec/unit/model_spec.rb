@@ -9,7 +9,7 @@ end
 
 describe Guacamole::Model do
   subject { TestModel }
-  let(:current_time) { DateTime.now }
+  let(:current_time) { Time.now }
 
   describe 'module inclusion' do
     it 'should include Virtus.model' do

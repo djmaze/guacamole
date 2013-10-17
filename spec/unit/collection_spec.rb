@@ -75,9 +75,9 @@ describe Guacamole::Collection do
       end
 
       it 'should set timestamps before creating the document' do
-        now = double('DateTime.now')
+        now = double('Time.now')
 
-        allow(DateTime).to receive(:now).once.and_return(now)
+        allow(Time).to receive(:now).once.and_return(now)
 
         expect(model).to receive(:created_at=).with(now).ordered
         expect(model).to receive(:updated_at=).with(now).ordered
@@ -166,9 +166,9 @@ describe Guacamole::Collection do
       end
 
       it 'should set the updated_at timestamp before replacing the document' do
-        now = double('DateTime.now')
+        now = double('Time.now')
 
-        allow(DateTime).to receive(:now).once.and_return(now)
+        allow(Time).to receive(:now).once.and_return(now)
         expect(model).to receive(:updated_at=).with(now)
 
         subject.replace model
