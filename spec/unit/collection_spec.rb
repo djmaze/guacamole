@@ -44,6 +44,52 @@ describe Guacamole::Collection do
     end
   end
 
+  describe 'database' do
+    before do
+      subject.database = nil
+    end
+
+    it 'should default to Guacamole.configuration.database' do
+      default_database = double('Database')
+      configuration    = double('Configuration', database: default_database)
+      allow(Guacamole).to receive(:configuration).and_return(configuration)
+
+      expect(subject.database).to eq default_database
+    end
+  end
+
+  describe 'connection' do
+    before do
+      subject.connection = nil
+    end
+
+    it 'should default to the collection "collection_name" in the database' do
+      database = double('Database')
+      allow(subject).to receive(:database).and_return(database)
+
+      expect(database).to receive(:[]).with(subject.collection_name)
+
+      subject.connection
+    end
+  end
+
+  describe 'mapper' do
+    before do
+      subject.mapper = nil
+    end
+
+    it 'should default to Guacamole.configuration.default_mapper' do
+      default_mapper   = double('Mapper')
+      default_mapper_instance = double('MapperInstance')
+      configuration    = double('Configuration', default_mapper: default_mapper)
+      allow(Guacamole).to receive(:configuration).and_return(configuration)
+
+      expect(default_mapper).to receive(:new).with(subject.model_class).and_return(default_mapper_instance)
+
+      expect(subject.mapper).to eq default_mapper_instance
+    end
+  end
+
   let(:connection) { double('Connection') }
   let(:mapper)     { double('Mapper') }
 

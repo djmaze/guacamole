@@ -11,7 +11,19 @@ module Guacamole
       def_delegators :mapper, :model_to_document
       def_delegator :connection, :fetch, :fetch_document
 
-      attr_accessor :connection, :mapper
+      attr_accessor :connection, :mapper, :database
+
+      def database
+        @database ||= Guacamole.configuration.database
+      end
+
+      def connection
+        @connection ||= database[collection_name]
+      end
+
+      def mapper
+        @mapper ||= Guacamole.configuration.default_mapper.new(model_class)
+      end
 
       def collection_name
         self.name.gsub(/Collection\z/,'').underscore
@@ -69,7 +81,7 @@ module Guacamole
 
         document
       end
-    end
 
+    end
   end
 end
