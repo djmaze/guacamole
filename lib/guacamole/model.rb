@@ -27,6 +27,16 @@ module Guacamole
       def id
         key
       end
+
+      def ==(comparison_object)
+        comparison_object.instance_of?(self.class) &&
+          key.present? &&
+          comparison_object.key == key &&
+          rev.present? &&
+          comparison_object.rev == rev
+      end
+      alias :eql? :==
+
     end
   end
 end
