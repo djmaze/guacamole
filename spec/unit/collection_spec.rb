@@ -36,7 +36,7 @@ describe Guacamole::Collection do
     end
 
     it 'should know the name of the collection in ArangoDB' do
-      expect(subject.collection_name).to eq "test"
+      expect(subject.collection_name).to eq 'test'
     end
 
     it 'should know the class of the model to manage' do
@@ -79,14 +79,13 @@ describe Guacamole::Collection do
     end
 
     it 'should default to Guacamole.configuration.default_mapper' do
-      default_mapper   = double('Mapper')
-      default_mapper_instance = double('MapperInstance')
-      configuration    = double('Configuration', default_mapper: default_mapper)
+      default_mapper  = double('Mapper')
+      mapper_instance = double('MapperInstance')
+      configuration   = double('Configuration', default_mapper: default_mapper)
       allow(Guacamole).to receive(:configuration).and_return(configuration)
+      allow(default_mapper).to receive(:new).with(subject.model_class).and_return(mapper_instance)
 
-      expect(default_mapper).to receive(:new).with(subject.model_class).and_return(default_mapper_instance)
-
-      expect(subject.mapper).to eq default_mapper_instance
+      expect(subject.mapper).to eq mapper_instance
     end
   end
 

@@ -28,14 +28,14 @@ module Guacamole
         key
       end
 
-      def ==(comparison_object)
-        comparison_object.instance_of?(self.class) &&
+      def ==(other)
+        other.instance_of?(self.class) &&
           key.present? &&
-          comparison_object.key == key &&
+          other.key == key &&
           rev.present? &&
-          comparison_object.rev == rev
+          other.rev == rev
       end
-      alias :eql? :==
+      alias_method :eql?, :==
 
     end
   end

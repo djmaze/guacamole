@@ -26,11 +26,11 @@ module Guacamole
       end
 
       def collection_name
-        self.name.gsub(/Collection\z/,'').underscore
+        name.gsub(/Collection\z/, '').underscore
       end
 
       def model_class
-        self.name.gsub(/Collection\z/,'').singularize.constantize
+        collection_name.singularize.camelcase.constantize
       end
 
       def by_key(key)
