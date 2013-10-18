@@ -65,7 +65,7 @@ describe 'CollectionBasics' do
     end
 
     it 'should save models to the database' do
-      new_article = Fabricate.build(:article, title: 'Always look on the bright side of life')
+      new_article = Fabricate.build(:article)
       subject.save new_article
 
       expect(subject.by_key(new_article.key)).to eq new_article
