@@ -6,7 +6,11 @@ $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 require 'fabrication'
 require 'ashikawa-core'
 
-require 'debugger'
+begin
+  require 'debugger'
+rescue LoadError
+  puts "Debugger is not available. Maybe you're Travis."
+end
 
 class Fabrication::Generator::Guacamole < Fabrication::Generator::Base
 
