@@ -4,6 +4,7 @@ $LOAD_PATH.unshift(File.dirname(__FILE__))
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 
 require 'fabrication'
+require 'logging'
 require 'ashikawa-core'
 
 begin
@@ -65,6 +66,13 @@ Guacamole.configure do |config|
       arango_config.username = username
       arango_config.password = password
     end
+    logger = Logging.logger['guacamole_logger']
+    logger.add_appenders(
+        Logging.appenders.file('log/acceptance.log')
+    )
+    logger.level = :info
+
+    arango_config.logger = logger
   }
 
   config.default_mapper = Guacamole::DocumentModelMapper

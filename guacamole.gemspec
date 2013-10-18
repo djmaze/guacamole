@@ -24,4 +24,5 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'activemodel', '>= 4.0.0'
 
   spec.add_development_dependency 'fabrication', '~> 2.8.1'
+  spec.add_development_dependency 'logging', '~> 1.8.1'
 end
