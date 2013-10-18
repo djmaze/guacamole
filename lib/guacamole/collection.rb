@@ -40,8 +40,8 @@ module Guacamole
       def save(model)
         return false unless model.valid?
 
-        add_timestamps_to_model model
-        create_document_from model
+        add_timestamps_to_model(model)
+        create_document_from(model)
         model
       end
 
