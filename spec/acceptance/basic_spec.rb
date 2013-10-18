@@ -1,5 +1,6 @@
 # -*- encoding : utf-8 -*-
 require 'guacamole'
+require 'acceptance/spec_helper'
 
 class Article
   include Guacamole::Model
@@ -54,13 +55,11 @@ describe 'CollectionBasics' do
 
   describe ArticlesCollection do
 
-    it 'should provide a method to find documents by key and return the appropriate model' do
-      pending 'Not yet implemented'
+    subject { ArticlesCollection }
 
-      # TODO: To make this test work we need to implement the following things
-      #   * Create test data
-      #   * Setup the test database and ensure it is in a defined state
-      #   * Implement the #== method on Guacamole::Model
+    let(:some_article) { Fabricate(:article) }
+
+    it 'should provide a method to find documents by key and return the appropriate model' do
       found_model = subject.by_key some_article.key
       expect(found_model).to eq some_article
     end
