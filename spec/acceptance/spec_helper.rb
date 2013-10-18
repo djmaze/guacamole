@@ -80,8 +80,6 @@ RSpec.configure do |config|
   end
 
   config.before(:each) do
-    Guacamole.configuration.database.collections.each do |collection|
-      collection.delete
-    end
+    Guacamole.configuration.database.collections.each { |collection| collection.truncate! }
   end
 end

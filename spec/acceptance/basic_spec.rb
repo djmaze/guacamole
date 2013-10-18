@@ -49,12 +49,12 @@ describe 'ModelBasics' do
       expect(subject.to_param).to eq 'random_number'
     end
   end
+
 end
 
 describe 'CollectionBasics' do
 
   describe ArticlesCollection do
-
     subject { ArticlesCollection }
 
     let(:some_article) { Fabricate(:article) }
@@ -64,6 +64,21 @@ describe 'CollectionBasics' do
       expect(found_model).to eq some_article
     end
 
+    it 'should save models to the database' do
+      new_article = Fabricate.build(:article, title: 'Always look on the bright side of life')
+      subject.save new_article
+
+      expect(subject.by_key(new_article.key)).to eq new_article
+    end
+
+    it 'should update models in the database' do
+      some_article.title = 'Has been updated'
+      subject.replace some_article
+
+      updated_article = subject.by_key(some_article.key)
+
+      expect(updated_article.title).to eq 'Has been updated'
+    end
   end
 
 end
