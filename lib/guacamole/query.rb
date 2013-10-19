@@ -5,6 +5,7 @@ module Guacamole
   class Query
     attr_reader :connection
     attr_reader :mapper
+    attr_accessor :example
 
     def initialize(connection, mapper)
       @connection = connection
@@ -12,8 +13,14 @@ module Guacamole
     end
 
     def each
-      connection.all.each do |document|
-        yield mapper.document_to_model(document)
+      if example
+        connection.by_example(example).each do |document|
+          yield mapper.document_to_model(document)
+        end
+      else
+        connection.all.each do |document|
+          yield mapper.document_to_model(document)
+        end
       end
     end
   end

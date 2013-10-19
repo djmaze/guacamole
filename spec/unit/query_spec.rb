@@ -18,9 +18,6 @@ describe Guacamole::Query do
     let(:model) { double }
 
     before do
-      allow(connection).to receive(:all)
-        .and_return(result)
-
       allow(result).to receive(:each)
         .and_yield(document)
 
@@ -28,21 +25,55 @@ describe Guacamole::Query do
         .and_return(model)
     end
 
-    it 'should get all documents' do
-      expect(connection).to receive(:all)
-        .with(no_args)
+    context 'no example was provided' do
+      before do
+        allow(connection).to receive(:all)
+          .and_return(result)
+      end
 
-      subject.each { }
+      it 'should get all documents' do
+        expect(connection).to receive(:all)
+          .with(no_args)
+
+        subject.each { }
+      end
+
+      it 'should iterate over the resulting documents' do
+        expect(result).to receive(:each)
+
+        subject.each { }
+      end
+
+      it 'should yield the models to the caller' do
+        expect { |b| subject.each(&b) }.to yield_with_args(model)
+      end
     end
 
-    it 'should iterate over the resulting documents' do
-      expect(result).to receive(:each)
+    context 'an example was provided' do
+      let(:example) { double }
+      before do
+        subject.example = example
 
-      subject.each { }
-    end
+        allow(connection).to receive(:by_example)
+          .and_return(result)
+      end
 
-    it 'should yield the models to the caller' do
-      expect { |b| subject.each(&b) }.to yield_with_args(model)
+      it 'should query by the given example' do
+        expect(connection).to receive(:by_example)
+          .with(example)
+
+        subject.each { }
+      end
+
+      it 'should iterate over the resulting documents' do
+        expect(result).to receive(:each)
+
+        subject.each { }
+      end
+
+      it 'should yield the models to the caller' do
+        expect { |b| subject.each(&b) }.to yield_with_args(model)
+      end
     end
   end
 end
