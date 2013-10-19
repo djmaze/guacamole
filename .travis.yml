@@ -1,4 +1,5 @@
 language: ruby
+bundler_args: --without debug
 before_script:
   - ./spec/setup/arangodb.sh
 rvm:

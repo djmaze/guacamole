@@ -7,9 +7,13 @@ class TestModel
   include Guacamole::Model
 end
 
+class OtherModel
+  include Guacamole::Model
+end
+
 describe Guacamole::Model do
   subject { TestModel }
-  let(:current_time) { DateTime.now }
+  let(:current_time) { Time.now }
 
   describe 'module inclusion' do
     it 'should include Virtus.model' do
@@ -75,6 +79,40 @@ describe Guacamole::Model do
     it 'should alias key to id for ActiveModel::Conversion compliance' do
       subject.key = 'my_key'
       expect(subject.id).to eq 'my_key'
+    end
+  end
+
+  describe '==' do
+    subject { TestModel.new(key: '134', rev: '23') }
+
+    it 'should return true for same class, key and rev' do
+      comparison_object = TestModel.new key: '134', rev: '23'
+
+      expect(subject).to eq comparison_object
+    end
+
+    it 'should return false if not the same class' do
+      comparison_object = OtherModel.new key: '134', rev: '23'
+
+      expect(subject).not_to eq comparison_object
+    end
+
+    it 'should return false if the key is not the same' do
+      comparison_object = TestModel.new key: '431', rev: '23'
+
+      expect(subject).not_to eq comparison_object
+    end
+
+    it 'should return false if the rev is not the same' do
+      comparison_object = TestModel.new key: '134', rev: '42'
+
+      expect(subject).not_to eq comparison_object
+    end
+
+    it 'should alias to eql?' do
+      comparison_object = TestModel.new key: '134', rev: '23'
+
+      expect(subject).to eql comparison_object
     end
   end
 end

@@ -1,15 +1,20 @@
 # -*- encoding : utf-8 -*-
 require 'guacamole'
+require 'acceptance/spec_helper'
 
-describe 'Basics' do
+class Article
+  include Guacamole::Model
 
-  class Article
-    include Guacamole::Model
+  attribute :title, String
 
-    attribute :title, String
+  validates :title, presence: true
+end
 
-    validates :title, presence: true
-  end
+class ArticlesCollection
+  include Guacamole::Collection
+end
+
+describe 'ModelBasics' do
 
   describe Article do
     it 'should allow setting its title' do
@@ -44,4 +49,36 @@ describe 'Basics' do
       expect(subject.to_param).to eq 'random_number'
     end
   end
+
+end
+
+describe 'CollectionBasics' do
+
+  describe ArticlesCollection do
+    subject { ArticlesCollection }
+
+    let(:some_article) { Fabricate(:article) }
+
+    it 'should provide a method to find documents by key and return the appropriate model' do
+      found_model = subject.by_key some_article.key
+      expect(found_model).to eq some_article
+    end
+
+    it 'should save models to the database' do
+      new_article = Fabricate.build(:article)
+      subject.save new_article
+
+      expect(subject.by_key(new_article.key)).to eq new_article
+    end
+
+    it 'should update models in the database' do
+      some_article.title = 'Has been updated'
+      subject.replace some_article
+
+      updated_article = subject.by_key(some_article.key)
+
+      expect(updated_article.title).to eq 'Has been updated'
+    end
+  end
+
 end
