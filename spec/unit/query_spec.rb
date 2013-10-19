@@ -12,6 +12,10 @@ describe Guacamole::Query do
   its(:connection) { should be connection }
   its(:mapper) { should be mapper }
 
+  it 'should be enumerable' do
+    expect(Guacamole::Query.ancestors).to include Enumerable
+  end
+
   describe 'each' do
     let(:result) { double }
     let(:document) { double }

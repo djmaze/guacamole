@@ -3,6 +3,8 @@
 module Guacamole
   # Build a query for ArangoDB
   class Query
+    include Enumerable
+
     attr_reader :connection
     attr_reader :mapper
     attr_accessor :example
