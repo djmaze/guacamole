@@ -8,10 +8,12 @@ module Guacamole
     attr_reader :connection
     attr_reader :mapper
     attr_accessor :example
+    attr_accessor :options
 
     def initialize(connection, mapper)
       @connection = connection
       @mapper = mapper
+      @options = {}
     end
 
     def each
@@ -27,22 +29,13 @@ module Guacamole
     end
 
     def limit(limit)
-      @limit = limit
+      options[:limit] = limit
       self
     end
 
     def skip(skip)
-      @skip = skip
+      options[:skip] = skip
       self
-    end
-
-    private
-
-    def options
-      opts = {}
-      opts[:limit] = @limit if @limit
-      opts[:skip] = @skip if @skip
-      opts
     end
   end
 end
