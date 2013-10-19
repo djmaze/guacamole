@@ -13,6 +13,8 @@ module Guacamole
     end
 
     def each
+      return to_enum(__callee__) unless block_given?
+
       iterator = ->(document) { yield mapper.document_to_model(document) }
 
       if example

@@ -47,6 +47,10 @@ describe Guacamole::Query do
       it 'should yield the models to the caller' do
         expect { |b| subject.each(&b) }.to yield_with_args(model)
       end
+
+      it 'should return an enumerator when called without a block' do
+        expect(subject.each).to be_an Enumerator
+      end
     end
 
     context 'an example was provided' do
@@ -73,6 +77,10 @@ describe Guacamole::Query do
 
       it 'should yield the models to the caller' do
         expect { |b| subject.each(&b) }.to yield_with_args(model)
+      end
+
+      it 'should return an enumerator when called without a block' do
+        expect(subject.each).to be_an Enumerator
       end
     end
   end
