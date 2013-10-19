@@ -318,4 +318,28 @@ describe Guacamole::Collection do
       expect(subject.by_example(example)).to be query
     end
   end
+
+  describe 'all' do
+    let(:query_connection) { double }
+    let(:query) { double }
+
+    before do
+      allow(connection).to receive(:query)
+        .and_return(query_connection)
+
+      allow(Guacamole::Query).to receive(:new)
+        .and_return(query)
+    end
+
+    it 'should create a new query with the query connection and mapper' do
+      expect(Guacamole::Query).to receive(:new)
+        .with(query_connection, mapper)
+
+      subject.all
+    end
+
+    it 'should return the query' do
+      expect(subject.all).to be query
+    end
+  end
 end
