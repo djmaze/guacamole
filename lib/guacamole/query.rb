@@ -20,7 +20,7 @@ module Guacamole
       iterator = ->(document) { yield mapper.document_to_model(document) }
 
       if example
-        connection.by_example(example).each(&iterator)
+        connection.by_example(example, options).each(&iterator)
       else
         connection.all(options).each(&iterator)
       end

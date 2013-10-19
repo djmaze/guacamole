@@ -84,7 +84,7 @@ describe Guacamole::Query do
 
       it 'should query by the given example' do
         expect(connection).to receive(:by_example)
-          .with(example)
+          .with(example, {})
 
         subject.each { }
       end
@@ -102,6 +102,20 @@ describe Guacamole::Query do
       it 'should return an enumerator when called without a block' do
         expect(subject.each).to be_an Enumerator
       end
+
+      it 'should accept a limit' do
+        expect(connection).to receive(:by_example)
+          .with(example, hash_including(limit: limit))
+
+        subject.limit(limit).each { }
+      end
+
+       it 'should accept a skip' do
+         expect(connection).to receive(:by_example)
+           .with(example, hash_including(skip: skip))
+
+         subject.skip(skip).each { }
+       end
     end
   end
 end
