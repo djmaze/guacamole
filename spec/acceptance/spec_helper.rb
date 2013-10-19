@@ -32,50 +32,31 @@ end
 
 Fabrication::Schematic::Definition::GENERATORS.unshift Fabrication::Generator::Guacamole
 
-module Guacamole
-  class Configuration
-    attr_accessor :database, :default_mapper
-  end
-
-  class << self
-    def configure(&block)
-      @configuration = Configuration.new
-      block.call @configuration
-
-      @configuration
-    end
-
-    def configuration
-      @configuration
-    end
-  end
-end
-
 # FIXME: This is copied from Ashikawa::Core for now but is not recommended. This
 # setup uses the default database instead of a custom DB. Due to this we're deleting
 # all collections in the default database each time we run the specs.
 # => This is not good!
-port = ENV['ARANGODB_PORT'] || 8529
+port     = ENV['ARANGODB_PORT'] || 8529
 username = ENV['ARANGODB_USERNAME'] || 'root'
 password = ENV['ARANGODB_PASSWORD'] || ''
 
 Guacamole.configure do |config|
+  logger = Logging.logger['guacamole_logger']
+  logger.add_appenders(
+      Logging.appenders.file('log/acceptance.log')
+  )
+  logger.level = :info
+
+  config.logger = logger
+
   config.database = Ashikawa::Core::Database.new { |arango_config|
     arango_config.url = "http://localhost:#{port}"
     unless ENV['ARANGODB_DISABLE_AUTHENTIFICATION']
       arango_config.username = username
       arango_config.password = password
     end
-    logger = Logging.logger['guacamole_logger']
-    logger.add_appenders(
-        Logging.appenders.file('log/acceptance.log')
-    )
-    logger.level = :info
-
-    arango_config.logger = logger
+    arango_config.logger = config.logger
   }
-
-  config.default_mapper = Guacamole::DocumentModelMapper
 end
 
 RSpec.configure do |config|
