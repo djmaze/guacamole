@@ -13,14 +13,12 @@ module Guacamole
     end
 
     def each
+      iterator = ->(document) { yield mapper.document_to_model(document) }
+
       if example
-        connection.by_example(example).each do |document|
-          yield mapper.document_to_model(document)
-        end
+        connection.by_example(example).each(&iterator)
       else
-        connection.all.each do |document|
-          yield mapper.document_to_model(document)
-        end
+        connection.all.each(&iterator)
       end
     end
   end
