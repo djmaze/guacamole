@@ -22,8 +22,27 @@ module Guacamole
       if example
         connection.by_example(example).each(&iterator)
       else
-        connection.all.each(&iterator)
+        connection.all(options).each(&iterator)
       end
+    end
+
+    def limit(limit)
+      @limit = limit
+      self
+    end
+
+    def skip(skip)
+      @skip = skip
+      self
+    end
+
+    private
+
+    def options
+      opts = {}
+      opts[:limit] = @limit if @limit
+      opts[:skip] = @skip if @skip
+      opts
     end
   end
 end
