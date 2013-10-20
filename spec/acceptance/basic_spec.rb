@@ -81,8 +81,6 @@ describe 'CollectionBasics' do
     end
 
     it 'should receive all documents by title' do
-      pending 'To be implemented'
-
       subject.save Fabricate.build(:article, title: 'Disturbed')
       subject.save Fabricate.build(:article, title: 'Not so Disturbed')
 
