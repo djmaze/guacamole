@@ -118,4 +118,23 @@ describe Guacamole::Query do
        end
     end
   end
+
+  describe 'first' do
+    context 'no example was provided' do
+      it 'should return the first result of the all query' do
+        first_result = double
+        first_result_as_model = double
+        results = [first_result]
+
+        allow(mapper).to receive(:document_to_model)
+          .with(first_result)
+          .and_return(first_result_as_model)
+
+        allow(connection).to receive(:all)
+          .and_return(results)
+
+        expect(subject.first).to be first_result_as_model
+      end
+    end
+  end
 end
