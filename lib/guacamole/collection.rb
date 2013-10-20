@@ -62,7 +62,7 @@ module Guacamole
       end
 
       def by_example(example)
-        query = Query.new(connection.query, mapper)
+        query = all
         query.example = example
         query
       end
