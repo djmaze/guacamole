@@ -346,4 +346,20 @@ describe Guacamole::Collection do
       expect(subject.all).to be query
     end
   end
+
+  describe 'map' do
+    let(:mapper) { double('Mapper') }
+
+    before do
+      subject.mapper = mapper
+    end
+
+    it 'should evaluate the block on the mapper instance' do
+      expect(mapper).to receive(:method_to_call_on_mapper)
+
+      subject.map do
+        method_to_call_on_mapper
+      end
+    end
+  end
 end

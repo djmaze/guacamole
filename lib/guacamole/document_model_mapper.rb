@@ -5,9 +5,11 @@ module Guacamole
   # Guacamole::Model instances.
   class DocumentModelMapper
     attr_reader :model_class
+    attr_reader :models_to_embed
 
     def initialize(model_class)
       @model_class = model_class
+      @models_to_embed = []
     end
 
     def document_to_model(document)
@@ -23,5 +25,8 @@ module Guacamole
       model.attributes.dup.except(:key, :rev)
     end
 
+    def embeds(model_name)
+      @models_to_embed << model_name
+    end
   end
 end

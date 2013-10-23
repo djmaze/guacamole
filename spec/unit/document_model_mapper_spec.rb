@@ -73,4 +73,13 @@ describe Guacamole::DocumentModelMapper do
     end
   end
 
+  describe 'embed' do
+    subject { Guacamole::DocumentModelMapper.new FancyModel }
+
+    it 'should remember which models to embed' do
+      subject.embeds :ponies
+
+      expect(subject.models_to_embed).to include :ponies
+    end
+  end
 end
