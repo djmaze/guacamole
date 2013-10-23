@@ -43,6 +43,11 @@ describe Guacamole::DocumentModelMapper do
 
       subject.document_to_model document
     end
+
+    context 'with embedded ponies' do
+      # This is handled by Virtus, we just need to provide a hash
+      # and the coercing will be taken care of by Virtus
+    end
   end
 
   describe 'model_to_document' do
@@ -71,6 +76,45 @@ describe Guacamole::DocumentModelMapper do
 
       subject.model_to_document(model)
     end
+
+    context 'with embedded ponies' do
+      let(:somepony) { double('Pony') }
+      let(:pony_array) { [somepony] }
+      let(:ponylicious_attributes) { double('Hash').as_null_object }
+
+      before do
+        subject.embeds :ponies
+
+        allow(model).to receive(:ponies)
+          .and_return pony_array
+
+        allow(somepony).to receive(:attributes)
+          .and_return ponylicious_attributes
+      end
+
+      it 'should convert all embedded ponies to pony hashes' do
+        expect(somepony).to receive(:attributes)
+          .and_return ponylicious_attributes
+
+        subject.model_to_document(model)
+      end
+
+      it 'should exclude key and rev on embedded ponies' do
+        expect(ponylicious_attributes).to receive(:except)
+          .with(:key, :rev)
+
+        subject.model_to_document(model)
+      end
+    end
   end
 
+  describe 'embed' do
+    subject { Guacamole::DocumentModelMapper.new FancyModel }
+
+    it 'should remember which models to embed' do
+      subject.embeds :ponies
+
+      expect(subject.models_to_embed).to include :ponies
+    end
+  end
 end
