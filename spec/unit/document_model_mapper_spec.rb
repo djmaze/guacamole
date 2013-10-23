@@ -71,6 +71,36 @@ describe Guacamole::DocumentModelMapper do
 
       subject.model_to_document(model)
     end
+
+    context 'with embedded ponies' do
+      let(:somepony) { double('Pony') }
+      let(:pony_array) { [somepony] }
+      let(:ponylicious_attributes) { double('Hash').as_null_object }
+
+      before do
+        subject.embeds :ponies
+
+        allow(model).to receive(:ponies)
+          .and_return pony_array
+
+        allow(somepony).to receive(:attributes)
+          .and_return ponylicious_attributes
+      end
+
+      it 'should convert all embedded ponies to pony hashes' do
+        expect(somepony).to receive(:attributes)
+          .and_return ponylicious_attributes
+
+        subject.model_to_document(model)
+      end
+
+      it 'should exclude key and rev on embedded ponies' do
+        expect(ponylicious_attributes).to receive(:except)
+          .with(:key, :rev)
+
+        subject.model_to_document(model)
+      end
+    end
   end
 
   describe 'embed' do
