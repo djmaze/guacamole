@@ -6,6 +6,7 @@ gemspec
 # Devtools
 group :development, :test do
   gem 'devtools', git: 'https://github.com/rom-rb/devtools.git'
+  gem 'guard-yard'
 end
 eval_gemfile 'Gemfile.devtools'
 
