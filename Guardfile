@@ -4,6 +4,6 @@ guard 'bundler' do
 end
 
 guard 'rspec', spec_paths: 'spec/unit' do
-  watch('spec/.+\.rb')
+  watch(%r{spec/.+\.rb})
   watch(%r{lib/guacamole/(.+)\.rb$}) { |m| "spec/unit/#{m[1]}_spec.rb" }
 end
