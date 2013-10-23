@@ -2,16 +2,27 @@
 require 'guacamole'
 require 'acceptance/spec_helper'
 
+class Comment
+  include Guacamole::Model
+
+  attribute :text, String
+end
+
 class Article
   include Guacamole::Model
 
   attribute :title, String
+  attribute :comments, Array[Comment]
 
   validates :title, presence: true
 end
 
 class ArticlesCollection
   include Guacamole::Collection
+
+  map do
+    embeds :comments
+  end
 end
 
 describe 'ModelBasics' do
@@ -87,6 +98,16 @@ describe 'CollectionBasics' do
       result = subject.by_example(title: 'Disturbed').first
 
       expect(result.title).to eq 'Disturbed'
+    end
+
+    it 'should allow to nest models' do
+      pending 'To be implemented'
+
+      article_with_comments = Fabricate(:article_with_two_comments)
+      found_article = subject.by_key(article_with_comments.key)
+
+      expect(found_article.comments.first).to be_a Comment
+      expect(found_article.comments).to eq article_with_comments.comments
     end
   end
 

@@ -74,6 +74,10 @@ module Guacamole
         Query.new(connection.query, mapper)
       end
 
+      def map(&block)
+        mapper.instance_eval(&block)
+      end
+
       def add_timestamps_to_model(model)
         timestamp = Time.now
         model.created_at = timestamp
