@@ -83,35 +83,33 @@ describe Guacamole::Model do
   end
 
   describe '==' do
-    subject { TestModel.new(key: '134', rev: '23') }
+    let(:key) { double('Key') }
+    let(:rev) { double('Rev') }
+    let(:updated_at) { Time.now }
+    let(:content) { double('String') }
+    let(:unixy_time) { 1_445_444_940 } # If you read this line and understand it, you get a beer
+    let(:timestamp_without_nsecs) { Time.at(unixy_time, 0) }
+    let(:timestamp_with_nsecs) { Time.at(unixy_time, 42) }
 
-    it 'should return true for same class, key and rev' do
-      comparison_object = TestModel.new key: '134', rev: '23'
+    subject { TestModel.new(key: key, rev: rev, updated_at: updated_at, content: content) }
+    let(:comparison_object) { TestModel.new(subject.attributes) }
+
+    it 'should not be equal if it is a different class' do
+      expect(subject).to_not eq double
+    end
+
+    it 'should be equal if all attributes are equal' do
+      expect(subject).to eq comparison_object
+    end
+
+    it 'should be equal if the time is equal in string representation' do
+      subject.updated_at = timestamp_with_nsecs
+      comparison_object.updated_at = timestamp_without_nsecs
 
       expect(subject).to eq comparison_object
     end
 
-    it 'should return false if not the same class' do
-      comparison_object = OtherModel.new key: '134', rev: '23'
-
-      expect(subject).not_to eq comparison_object
-    end
-
-    it 'should return false if the key is not the same' do
-      comparison_object = TestModel.new key: '431', rev: '23'
-
-      expect(subject).not_to eq comparison_object
-    end
-
-    it 'should return false if the rev is not the same' do
-      comparison_object = TestModel.new key: '134', rev: '42'
-
-      expect(subject).not_to eq comparison_object
-    end
-
-    it 'should alias to eql?' do
-      comparison_object = TestModel.new key: '134', rev: '23'
-
+    it 'should alias `eql?` to `==`' do
       expect(subject).to eql comparison_object
     end
   end
