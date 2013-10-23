@@ -101,8 +101,6 @@ describe 'CollectionBasics' do
     end
 
     it 'should allow to nest models' do
-      pending 'To be implemented'
-
       article_with_comments = Fabricate(:article_with_two_comments)
       found_article = subject.by_key(article_with_comments.key)
 
