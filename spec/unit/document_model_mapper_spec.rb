@@ -43,6 +43,11 @@ describe Guacamole::DocumentModelMapper do
 
       subject.document_to_model document
     end
+
+    context 'with embedded ponies' do
+      # This is handled by Virtus, we just need to provide a hash
+      # and the coercing will be taken care of by Virtus
+    end
   end
 
   describe 'model_to_document' do
