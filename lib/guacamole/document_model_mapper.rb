@@ -34,5 +34,11 @@ module Guacamole
     def embeds(model_name)
       @models_to_embed << model_name
     end
+
+    def referenced_by(model_name)
+    end
+
+    def references(model_name)
+    end
   end
 end
