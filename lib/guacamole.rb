@@ -12,5 +12,8 @@ if defined?(Rails)
   require 'guacamole/railtie'
 end
 
+# An ODM for ArangoDB
+#
+# For more general information, see README or Homepage
 module Guacamole
 end
