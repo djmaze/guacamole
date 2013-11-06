@@ -7,6 +7,7 @@ require 'rails'
 
 module Guacamole
   # Class to hook into Rails configuration and initializer
+  # @api private
   class Railtie < Rails::Railtie
 
     rake_tasks do
