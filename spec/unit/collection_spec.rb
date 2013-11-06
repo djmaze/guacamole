@@ -197,20 +197,35 @@ describe Guacamole::Collection do
   describe 'delete' do
     let(:document) { double('Document') }
     let(:key)      { double('Key') }
+    let(:model)    { double('Model', key: key) }
 
     before do
       allow(connection).to receive(:fetch).with(key).and_return(document)
       allow(document).to receive(:delete)
     end
 
-    it 'should delete the according document' do
-      expect(document).to receive(:delete)
+    context 'a key was provided' do
+      it 'should delete the according document' do
+        expect(document).to receive(:delete)
 
-      subject.delete key
+        subject.delete key
+      end
+
+      it 'should return the according key' do
+        expect(subject.delete(key)).to eq key
+      end
     end
 
-    it 'should return the according key' do
-      expect(subject.delete(key)).to eq key
+    context 'a model was provided' do
+      it 'should delete the according document' do
+        expect(document).to receive(:delete)
+
+        subject.delete model
+      end
+
+      it 'should return the according key' do
+        expect(subject.delete(model)).to eq key
+      end
     end
   end
 

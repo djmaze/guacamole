@@ -115,13 +115,20 @@ module Guacamole
         model
       end
 
-      # Delete a model from the database by key
+      # Delete a model from the database
       #
-      # @param [String] key The key of the model
+      # @param [String, Model] model_or_key The key of the model or a model
       # @return [String] The key
-      # @example Delete a podcast
+      # @example Delete a podcast by key
       #   PodcastsCollection.delete(podcast.key)
-      def delete(key)
+      # @example Delete a podcast by model
+      #   PodcastsCollection.delete(podcast)
+      def delete(model_or_key)
+        key = if model_or_key.respond_to? :key
+          model_or_key.key
+        else
+          model_or_key
+        end
         fetch_document(key).delete
         key
       end
