@@ -96,7 +96,8 @@ UncommunicativeVariableName:
   accept: []
 UnusedParameters:
   enabled: true
-  exclude: []
+  exclude:
+  - Guacamole::Model#==
 UtilityFunction:
   enabled: false
   exclude: []
