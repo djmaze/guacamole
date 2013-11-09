@@ -4,7 +4,7 @@
 |:----------------|:--------------------------------------------------
 | Homepage        | https://github.com/triAGENS/guacamole
 | Documentation   | **TODO: Add RubyDoc URL**
-| CI              | **TODO: Add Travis Badge**
+| CI              | [![Build Status](https://travis-ci.org/triAGENS/guacamole.png)](https://travis-ci.org/triAGENS/guacamole)
 | Code Metrics    | [![Code Climate](https://codeclimate.com/github/triAGENS/guacamole.png)](https://codeclimate.com/github/triAGENS/guacamole)
 | Gem Version     | **TODO: Add Badge Fury Badge**
 | Dependencies    | [![Dependency Status](https://gemnasium.com/triAGENS/guacamole.png)](https://gemnasium.com/triAGENS/guacamole)
