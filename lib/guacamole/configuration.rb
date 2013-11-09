@@ -10,19 +10,57 @@ require 'guacamole/document_model_mapper'
 module Guacamole
 
   class << self
+    # Configure Guacamole
+    #
+    # Takes a block in which you can configure Guacamole.
+    # @return [Configuration] the resulting configuration
     def configure(&config_block)
       config_block.call configuration
 
       configuration
     end
 
+    # Contains the configuration of Guacamole
+    #
+    # @return [Configuration]
     def configuration
       @configuration ||= Configuration
     end
   end
 
-  # This class holds the configuration for Guacamole.
+  # Current configuration
+  #
+  # You can receive the configuration by calling Guacamole.configuration
+  #
+  # @!attribute self.database
+  #   The raw Database object
+  #
+  #   The Database implementation is part of Ashikawa::Core
+  #
+  #   @see http://rubydoc.info/gems/ashikawa-core/Ashikawa/Core/Database
+  #   @return [Ashikawa::Core::Database]
+  #
+  # @!attribute self.default_mapper
+  #   The Mapper class that is used by default. This defaults to
+  #   DocumentModelMapper
+  #
+  #   @return [Class] the default mapper class
+  #
+  # @!attribute self.logger
+  #   The logger
+  #
+  #   This defaults to the Rails logger
+  #
+  #   @return [Object] the logger
+  #
+  # @!attribute [r] self.current_environment
+  #   The current environment Guacamole is running in
+  #
+  #   If you are running in Rails, this will return the current Rails environment
+  #
+  #   @return [Object] current environment
   class Configuration
+    # @!visibility protected
     attr_accessor :database, :default_mapper, :logger
 
     class << self
@@ -38,6 +76,9 @@ module Guacamole
         configuration.logger ||= (rails_logger || default_logger)
       end
 
+      # Load a YAML configuration file to configure Guacamole
+      #
+      # @param [String] file_name The file name of the configuration
       def load(file_name)
         config = YAML.load_file(file_name)[current_environment.to_s]
 
