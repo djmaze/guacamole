@@ -10,7 +10,7 @@
 | Dependencies    | [![Dependency Status](https://gemnasium.com/triAGENS/guacamole.png)](https://gemnasium.com/triAGENS/guacamole)
 | Ready Stories   | [![Stories in Ready](https://badge.waffle.io/triagens/guacamole.png?label=ready)](https://waffle.io/triagens/guacamole)
 
-Guacamole is...
+Guacamole is an ODM for ArangoDB that offers integration for Ruby on Rails.
 
 All tests run on Travis CI for the following versions of Ruby:
 
