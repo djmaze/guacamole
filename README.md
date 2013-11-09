@@ -40,7 +40,61 @@ gem install guacamole
 
 ## Usage
 
-Currently this lib can't do anything.
+There are two main concepts you have to be familiar with in Guacamole: Collections and models. Both of these are modules that you can mix in to your classes:
+
+### Models
+
+Models are representations of your data. They are not aware of the database but work independent of it. A simple example for a model:
+
+```ruby
+class Article
+  include Guacamole::Model
+
+  attribute :title, String
+  attribute :comments, Array[Comment]
+
+  validates :title, presence: true
+end
+```
+
+This example defines a model called Article, which has a title represented by a String and an array of comments. Comment in this case is another `Guacamole::Model`. The `Model` mixin will also add validation from ActiveModel to your model – it works as you know it from ActiveRecord for example.
+
+In a Rails application, they are stored in the `app/models` directory by convention.
+
+### Collections
+
+Collections are your gateway to the database. They persist your models and offer querying for them. They will translate the raw data from the database to your domain models and vice versa. By convention they are the pluralized version of the model with the suffix `Collection`. So given the model from above, this could be the according collection:
+
+```ruby
+class ArticlesCollection
+  include Guacamole::Collection
+
+  map do
+    embeds :comments
+  end
+end
+```
+
+As you can see above, you don't need to explicitly state that you are mapping to the `Article` class, because this is the naming convention. But what does `map` do?
+
+In the block you provide to `map` you can configure things that should happen when you map from the raw data to the model and vice versa. In a document store like ArangoDB you can have nested data – so the JSON stored in ArangoDB's `articles` collection could look something like this:
+
+```json
+{
+  'title': 'The grand blog post',
+  'comments': [
+    {
+      'text': 'This was really a grand blog post'
+    },
+    {
+      'text': 'I don't think it was that great'
+    }
+  ]
+```
+
+With the `map` configuration above it would take each of the objects in the comments hash and create instances of the `Comment` model from them. Then it would set the `comments` attribute of the new article and set it to the array of those comments.
+
+In a Rails application, they are stored in the `app/models` directory by convention.
 
 ## Issues or Questions
 
