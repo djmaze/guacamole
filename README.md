@@ -3,10 +3,10 @@
 | Project         | Guacamole
 |:----------------|:--------------------------------------------------
 | Homepage        | https://github.com/triAGENS/guacamole
-| Documentation   | **TODO: Add RubyDoc URL**
+| Documentation   | [RubyDoc](http://rubydoc.info/gems/guacamole/frames)
 | CI              | [![Build Status](https://travis-ci.org/triAGENS/guacamole.png)](https://travis-ci.org/triAGENS/guacamole)
 | Code Metrics    | [![Code Climate](https://codeclimate.com/github/triAGENS/guacamole.png)](https://codeclimate.com/github/triAGENS/guacamole)
-| Gem Version     | **TODO: Add Badge Fury Badge**
+| Gem Version     | [![Gem Version](https://badge.fury.io/rb/guacamole.png)](http://badge.fury.io/rb/guacamole)
 | Dependencies    | [![Dependency Status](https://gemnasium.com/triAGENS/guacamole.png)](https://gemnasium.com/triAGENS/guacamole)
 | Ready Stories   | [![Stories in Ready](https://badge.waffle.io/triagens/guacamole.png?label=ready)](https://waffle.io/triagens/guacamole)
 
