@@ -81,13 +81,13 @@ In the block you provide to `map` you can configure things that should happen wh
 
 ```json
 {
-  'title': 'The grand blog post',
-  'comments': [
+  "title": "The grand blog post",
+  "comments": [
     {
-      'text': 'This was really a grand blog post'
+      "text": "This was really a grand blog post"
     },
     {
-      'text': 'I don't think it was that great'
+      "text": "I don't think it was that great"
     }
   ]
 ```
