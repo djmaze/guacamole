@@ -254,7 +254,7 @@ describe Guacamole::Collection do
 
         let(:model)    { double('Model', key: key).as_null_object }
 
-        it 'should not be used to replace the document' do 
+        it 'should not be used to replace the document' do
           expect(connection).to receive(:replace).never
 
           subject.save model

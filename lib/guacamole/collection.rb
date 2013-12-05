@@ -98,8 +98,8 @@ module Guacamole
 
       # Persist a model in the collection or replace it in the database, depending if it is already persisted
       #
-      # * If {Model#persisted? model#persisted?} is `false`, the model will be saved in the collection. Timestamps, revision
-      #   and key will be set on the model.
+      # * If {Model#persisted? model#persisted?} is `false`, the model will be saved in the collection.
+      #   Timestamps, revision and key will be set on the model.
       # * If {Model#persisted? model#persisted?} is `true`, it replaces the currently saved version of the model with
       #   its new version. It searches for the entry in the database
       #   by key. This will change the updated_at timestamp and revision
