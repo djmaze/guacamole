@@ -116,6 +116,167 @@ describe Guacamole::Collection do
   describe 'save' do
 
     before do
+      allow(mapper).to receive(:model_to_document).with(model).and_return(document)
+    end
+
+    let(:key)       { double('Key') }
+    let(:rev)       { double('Rev') }
+    let(:document)  { double('Document', key: key, revision: rev).as_null_object }
+    let(:model)     { double('Model').as_null_object }
+    let(:response)  { double('Hash') }
+
+    context 'a valid model' do
+
+      before do
+        allow(model).to receive(:valid?).and_return(true)
+      end
+
+      context 'which is not persisted' do
+
+        before do
+          allow(connection).to receive(:create_document).with(document).and_return(document)
+          allow(model).to receive(:persisted?).and_return(false)
+        end
+
+        it 'should return the model after calling save' do
+          expect(subject.save(model)).to eq model
+        end
+
+        it 'should set timestamps before creating the document' do
+          now = double('Time.now')
+
+          allow(Time).to receive(:now).once.and_return(now)
+
+          expect(model).to receive(:created_at=).with(now).ordered
+          expect(model).to receive(:updated_at=).with(now).ordered
+
+          allow(connection).to receive(:create_document).with(document).and_return(document).ordered
+
+          subject.save model
+        end
+
+        it 'should add key to model' do
+          expect(model).to receive(:key=).with(key)
+
+          subject.save model
+        end
+
+        it 'should add rev to model' do
+          expect(model).to receive(:rev=).with(rev)
+
+          subject.save model
+        end
+      end
+
+      context 'which is persisted' do
+
+        before do
+          allow(model).to receive(:persisted?).and_return(true)
+          allow(connection).to receive(:replace).and_return(response)
+          allow(response).to receive(:[]).with('_rev').and_return(rev)
+        end
+
+        let(:model)    { double('Model', key: key).as_null_object }
+
+        it 'should set the updated_at timestamp before replacing the document' do
+          now = double('Time.now')
+
+          allow(Time).to receive(:now).once.and_return(now)
+          expect(model).to receive(:updated_at=).with(now)
+
+          subject.save model
+        end
+
+        it 'should replace the document by key via the connection' do
+          expect(connection).to receive(:replace).with(key, document)
+
+          subject.save model
+        end
+
+        it 'should update the revision after replacing the document' do
+          allow(connection).to receive(:replace).and_return(response).ordered
+          expect(model).to receive(:rev=).with(rev).ordered
+
+          subject.save model
+        end
+
+        it 'should return the model' do
+          expect(subject.save(model)).to eq model
+        end
+
+        it 'should not update created_at' do
+          expect(model).to receive(:created_at=).never
+
+          subject.save model
+        end
+
+      end
+    end
+
+    context 'an invalid model' do
+
+      before do
+        expect(model).to receive(:valid?).and_return(false)
+      end
+
+      context 'which is not persisted' do
+
+        before do
+          allow(model).to receive(:persisted?).and_return(false)
+        end
+
+        it 'should not be used to create the document' do
+          expect(connection).to receive(:create_document).never
+
+          subject.save model
+        end
+
+        it 'should not be changed' do
+          expect(model).to receive(:created_at=).never
+          expect(model).to receive(:updated_at=).never
+          expect(model).to receive(:key=).never
+          expect(model).to receive(:rev=).never
+
+          subject.save model
+        end
+
+        it 'should return false' do
+          expect(subject.save(model)).to be false
+        end
+      end
+
+      context 'which is persisted' do
+
+        before do
+          allow(model).to receive(:persisted?).and_return(true)
+          allow(response).to receive(:[]).with('_rev').and_return(rev)
+        end
+
+        let(:model)    { double('Model', key: key).as_null_object }
+
+        it 'should not be used to replace the document' do
+          expect(connection).to receive(:replace).never
+
+          subject.save model
+        end
+
+        it 'should not be changed' do
+          expect(model).to receive(:rev=).never
+          expect(model).to receive(:updated_at=).never
+
+          subject.save model
+        end
+
+        it 'should return false' do
+          expect(subject.save(model)).to be false
+        end
+      end
+    end
+  end
+
+  describe 'create' do
+
+    before do
       allow(connection).to receive(:create_document).with(document).and_return(document)
       allow(mapper).to receive(:model_to_document).with(model).and_return(document)
     end
@@ -134,11 +295,11 @@ describe Guacamole::Collection do
         expect(connection).to receive(:create_document).with(document).and_return(document)
         expect(mapper).to receive(:model_to_document).with(model).and_return(document)
 
-        subject.save model
+        subject.create model
       end
 
-      it 'should return the model after calling save' do
-        expect(subject.save(model)).to eq model
+      it 'should return the model after calling create' do
+        expect(subject.create(model)).to eq model
       end
 
       it 'should set timestamps before creating the document' do
@@ -151,19 +312,19 @@ describe Guacamole::Collection do
 
         allow(connection).to receive(:create_document).with(document).and_return(document).ordered
 
-        subject.save model
+        subject.create model
       end
 
       it 'should add key to model' do
         expect(model).to receive(:key=).with(key)
 
-        subject.save model
+        subject.create model
       end
 
       it 'should add rev to model' do
         expect(model).to receive(:rev=).with(rev)
 
-        subject.save model
+        subject.create model
       end
     end
 
@@ -176,7 +337,7 @@ describe Guacamole::Collection do
       it 'should not be used to create the document' do
         expect(connection).to receive(:create_document).never
 
-        subject.save model
+        subject.create model
       end
 
       it 'should not be changed' do
@@ -185,11 +346,11 @@ describe Guacamole::Collection do
         expect(model).to receive(:key=).never
         expect(model).to receive(:rev=).never
 
-        subject.save model
+        subject.create model
       end
 
       it 'should return false' do
-        expect(subject.save(model)).to be false
+        expect(subject.create(model)).to be false
       end
     end
   end

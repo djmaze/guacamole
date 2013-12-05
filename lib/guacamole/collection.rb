@@ -96,6 +96,31 @@ module Guacamole
         mapper.document_to_model connection.fetch(key)
       end
 
+      # Persist a model in the collection or replace it in the database, depending if it is already persisted
+      #
+      # * If {Model#persisted? model#persisted?} is `false`, the model will be saved in the collection.
+      #   Timestamps, revision and key will be set on the model.
+      # * If {Model#persisted? model#persisted?} is `true`, it replaces the currently saved version of the model with
+      #   its new version. It searches for the entry in the database
+      #   by key. This will change the updated_at timestamp and revision
+      #   of the provided model.
+      #
+      # See also {#create create} and {#replace replace} for explicit usage.
+      #
+      # @param [Model] model The model to be saved
+      # @return [Model] The provided model
+      # @example Save a podcast to the database
+      #   podcast = Podcast.new(title: 'Best Show', guest: 'Dirk Breuer')
+      #   PodcastsCollection.save(podcast)
+      #   podcast.key #=> '27214247'
+      # @example Get a podcast, update its title, replace it
+      #   podcast = PodcastsCollection.by_key('27214247')
+      #   podcast.title = 'Even better'
+      #   PodcastsCollection.save(podcast)
+      def save(model)
+        model.persisted? ? replace(model) : create(model)
+      end
+
       # Persist a model in the collection
       #
       # The model will be saved in the collection. Timestamps, revision
@@ -107,7 +132,7 @@ module Guacamole
       #   podcast = Podcast.new(title: 'Best Show', guest: 'Dirk Breuer')
       #   PodcastsCollection.save(podcast)
       #   podcast.key #=> '27214247'
-      def save(model)
+      def create(model)
         return false unless model.valid?
 
         add_timestamps_to_model(model)
