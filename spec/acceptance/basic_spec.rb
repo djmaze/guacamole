@@ -75,7 +75,7 @@ describe 'CollectionBasics' do
       expect(found_model).to eq some_article
     end
 
-    it 'should save models to the database' do
+    it 'should create models in the database' do
       new_article = Fabricate.build(:article)
       subject.save new_article
 
@@ -84,7 +84,7 @@ describe 'CollectionBasics' do
 
     it 'should update models in the database' do
       some_article.title = 'Has been updated'
-      subject.replace some_article
+      subject.save some_article
 
       updated_article = subject.by_key(some_article.key)
 
