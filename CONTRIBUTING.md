@@ -2,12 +2,12 @@
 
 When you want to write code for the project, please follow these guidelines:
 
-1. **Claim** the ticket: Tell us that you want to work on a certain ticket, we will assign it to you (We don't want two people to work on the same thing ;) )
-2. **Fork** your feature branch from the `development` branch (not the `master` branch)
+1. **Claim** the ticket: Tell us that you want to work on a certain ticket, we will assign it to you (We don't want two people to work on the same thing :wink: )
+2. **Fork** your feature branch from the `master` branch
 3. Write an **acceptance test**: Describe what you want to do (our acceptance tests touch the database)
 4. **Implement** it: Write a unit test, check that it fails, make the test pass – repeat (our unit tests don't touch the database)
 5. Write **documentation** for it.
-6. Check with `bundle exec rake ci` (you need to have ArangoDB running for that) that everything is fine and send the pull request to the `development` branch :)
+6. Check with `bundle exec rake ci` (you need to have ArangoDB running for that) that everything is fine and send the pull request to the `master` branch :)
 
 ## Setup
 
