@@ -41,13 +41,13 @@ describe Guacamole::Query do
         expect(connection).to receive(:all)
           .with({})
 
-        subject.each { }
+        subject.each {}
       end
 
       it 'should iterate over the resulting documents' do
         expect(result).to receive(:each)
 
-        subject.each { }
+        subject.each {}
       end
 
       it 'should yield the models to the caller' do
@@ -62,14 +62,14 @@ describe Guacamole::Query do
         expect(connection).to receive(:all)
           .with(hash_including limit: limit)
 
-        subject.limit(limit).each { }
+        subject.limit(limit).each {}
       end
 
        it 'should accept a skip' do
          expect(connection).to receive(:all)
            .with(hash_including skip: skip)
 
-         subject.skip(skip).each { }
+         subject.skip(skip).each {}
        end
     end
 
@@ -86,13 +86,13 @@ describe Guacamole::Query do
         expect(connection).to receive(:by_example)
           .with(example, {})
 
-        subject.each { }
+        subject.each {}
       end
 
       it 'should iterate over the resulting documents' do
         expect(result).to receive(:each)
 
-        subject.each { }
+        subject.each {}
       end
 
       it 'should yield the models to the caller' do
@@ -107,14 +107,14 @@ describe Guacamole::Query do
         expect(connection).to receive(:by_example)
           .with(example, hash_including(limit: limit))
 
-        subject.limit(limit).each { }
+        subject.limit(limit).each {}
       end
 
        it 'should accept a skip' do
          expect(connection).to receive(:by_example)
            .with(example, hash_including(skip: skip))
 
-         subject.skip(skip).each { }
+         subject.skip(skip).each {}
        end
     end
   end

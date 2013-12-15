@@ -150,10 +150,10 @@ module Guacamole
       #   PodcastsCollection.delete(podcast)
       def delete(model_or_key)
         key = if model_or_key.respond_to? :key
-          model_or_key.key
-        else
-          model_or_key
-        end
+                model_or_key.key
+              else
+                model_or_key
+              end
         fetch_document(key).delete
         key
       end
@@ -265,7 +265,6 @@ module Guacamole
 
         document
       end
-
     end
   end
 end

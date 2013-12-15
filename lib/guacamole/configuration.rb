@@ -8,7 +8,6 @@ require 'active_support/core_ext'
 require 'guacamole/document_model_mapper'
 
 module Guacamole
-
   class << self
     # Configure Guacamole
     #

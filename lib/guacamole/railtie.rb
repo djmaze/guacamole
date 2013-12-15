@@ -9,7 +9,6 @@ module Guacamole
   # Class to hook into Rails configuration and initializer
   # @api private
   class Railtie < Rails::Railtie
-
     rake_tasks do
       load 'guacamole/railtie/database.rake'
     end
@@ -22,6 +21,5 @@ module Guacamole
         Guacamole::Configuration.load config_file
       end
     end
-
   end
 end

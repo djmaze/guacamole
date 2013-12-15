@@ -14,7 +14,6 @@ rescue LoadError
 end
 
 class Fabrication::Generator::Guacamole < Fabrication::Generator::Base
-
   def self.supports?(klass)
     defined?(Guacamole) && klass.ancestors.include?(Guacamole::Model)
   end
@@ -27,7 +26,6 @@ class Fabrication::Generator::Guacamole < Fabrication::Generator::Base
   def validate_instance
     _instance.valid?
   end
-
 end
 
 Fabrication::Schematic::Definition::GENERATORS.unshift Fabrication::Generator::Guacamole
