@@ -265,7 +265,6 @@ module Guacamole
 
         document
       end
-
     end
   end
 end
