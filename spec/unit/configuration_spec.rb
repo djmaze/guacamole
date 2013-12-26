@@ -25,7 +25,7 @@ describe Guacamole::Configuration do
   subject { Guacamole::Configuration }
 
   describe 'database' do
-    it 'should set the logger' do
+    it 'should set the database' do
       database         = double('Database')
       subject.database = database
 
